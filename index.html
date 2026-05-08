@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashif Ibrahim — Full Stack Developer & AI Integration Specialist</title>
+    <meta name="description" content="Full Stack Developer & AI Integration Specialist. Building modern web apps, AI systems, ecommerce platforms, and scalable digital experiences.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'dm': ['"DM Sans"', 'sans-serif'],
+                        'inter': ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: {
+                            50: '#1a1a2e', 100: '#16162a', 200: '#121226',
+                            300: '#0e0e22', 400: '#0a0a1e', 500: '#06061a',
+                            600: '#050516', 700: '#040412', 800: '#03030e', 900: '#02020a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: #06061a; color: #fff; overflow-x: hidden; }
+
+        #loader {
+            position: fixed; inset: 0; z-index: 9999; background: #06061a;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-ring {
+            width: 60px; height: 60px; border: 3px solid rgba(16,185,129,0.15);
+            border-top-color: #10b981; border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #06061a; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 3px; }
+
+        .typing-cursor { display: inline-block; width: 3px; height: 1.1em; background: #10b981; margin-left: 4px; animation: blink 0.8s step-end infinite; vertical-align: text-bottom; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .particle { position: absolute; border-radius: 50%; pointer-events: none; animation: floatParticle linear infinite; }
+        @keyframes floatParticle {
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+            10% { opacity: 1; } 90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px) scale(0.3); opacity: 0; }
+        }
+
+        .glow-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; animation: orbFloat 8s ease-in-out infinite alternate; }
+        @keyframes orbFloat { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, -30px) scale(1.15); } }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
+
+        .glass-card {
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.06); transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        .glass-card:hover {
+            background: rgba(255,255,255,0.06); border-color: rgba(16,185,129,0.3);
+            transform: translateY(-6px); box-shadow: 0 25px 50px -12px rgba(16,185,129,0.15);
+        }
+
+        .gradient-border { position: relative; }
+        .gradient-border::before {
+            content: ''; position: absolute; inset: -1px; border-radius: inherit;
+            background: linear-gradient(135deg, rgba(16,185,129,0.4), transparent, rgba(59,130,246,0.4));
+            z-index: -1; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .gradient-border:hover::before { opacity: 1; }
+
+        .btn-glow { position: relative; overflow: hidden; transition: all 0.3s ease; }
+        .btn-glow::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+            transform: translateX(-100%); transition: transform 0.6s ease;
+        }
+        .btn-glow:hover::after { transform: translateX(100%); }
+        .btn-glow:active { transform: scale(0.97); }
+
+        .ripple { position: relative; overflow: hidden; }
+        .ripple-effect {
+            position: absolute; border-radius: 50%; background: rgba(255,255,255,0.2);
+            transform: scale(0); animation: rippleAnim 0.6s ease-out forwards; pointer-events: none;
+        }
+        @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+        .skill-bar-fill { width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
+
+        .chatbot-popup {
+            transform: scale(0.8) translateY(20px); opacity: 0; visibility: hidden;
+            transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+        }
+        .chatbot-popup.open { transform: scale(1) translateY(0); opacity: 1; visibility: visible; }
+
+        .whatsapp-pulse { animation: waPulse 2s ease-in-out infinite; }
+        @keyframes waPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); } 50% { box-shadow: 0 0 0 14px rgba(37,211,102,0); } }
+
+        .success-popup { transform: scale(0.9); opacity: 0; visibility: hidden; transition: all 0.35s ease; }
+        .success-popup.show { transform: scale(1); opacity: 1; visibility: visible; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981, #3b82f6, #a78bfa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .grid-bg {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .float-slow { animation: floatSlow 6s ease-in-out infinite; }
+        .float-medium { animation: floatMedium 4s ease-in-out infinite; }
+        .float-fast { animation: floatFast 3s ease-in-out infinite; }
+        @keyframes floatSlow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes floatMedium { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes floatFast { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 50%; width: 0; height: 2px;
+            background: #10b981; transition: all 0.3s ease; transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .mobile-menu.open { transform: translateX(0); }
+
+        .count-up { transition: all 0.3s ease; }
+
+        .stagger-children > *:nth-child(1) { transition-delay: 0.05s; }
+        .stagger-children > *:nth-child(2) { transition-delay: 0.1s; }
+        .stagger-children > *:nth-child(3) { transition-delay: 0.15s; }
+        .stagger-children > *:nth-child(4) { transition-delay: 0.2s; }
+        .stagger-children > *:nth-child(5) { transition-delay: 0.25s; }
+        .stagger-children > *:nth-child(6) { transition-delay: 0.3s; }
+        .stagger-children > *:nth-child(7) { transition-delay: 0.35s; }
+        .stagger-children > *:nth-child(8) { transition-delay: 0.4s; }
+        .stagger-children > *:nth-child(9) { transition-delay: 0.45s; }
+        .stagger-children > *:nth-child(10) { transition-delay: 0.5s; }
+        .stagger-children > *:nth-child(11) { transition-delay: 0.55s; }
+        .stagger-children > *:nth-child(12) { transition-delay: 0.6s; }
+        .stagger-children > *:nth-child(13) { transition-delay: 0.65s; }
+
+        .form-input {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            background: rgba(255,255,255,0.06); border-color: rgba(16,185,129,0.5);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.1); outline: none;
+        }
+        .form-input.error { border-color: #ef4444; }
+        .error-msg { color: #ef4444; font-size: 0.75rem; margin-top: 4px; display: none; }
+        .error-msg.show { display: block; }
+
+        .typing-dot {
+            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: #10b981; animation: typingBounce 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-6px); opacity: 1; } }
+
+        .btn-submitting { pointer-events: none; opacity: 0.7; }
+        .btn-submitting .spinner { display: inline-block; }
+        .spinner {
+            display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite;
+            vertical-align: middle; margin-right: 8px;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="text-center">
+            <div class="loader-ring mx-auto mb-4"></div>
+            <p class="text-emerald-400 text-sm font-medium tracking-widest uppercase">Loading</p>
+        </div>
+    </div>
+
+    <!-- PARTICLES -->
+    <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="#hero" class="flex items-center gap-2 group">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm transition-transform duration-300 group-hover:scale-110">AI</div>
+                    <span class="text-white font-semibold text-lg tracking-tight hidden sm:block">Ashif<span class="text-emerald-400">.</span></span>
+                </a>
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="#hero" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">Home</a>
+                    <a href="#about" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">About</a>
+                    <a href="#skills" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">Skills</a>
+                    <a href="#services" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">Services</a>
+                    <a href="#projects" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">Projects</a>
+                    <a href="#testimonials" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">Reviews</a>
+                    <a href="#booking" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">Book</a>
+                    <a href="#contact" class="nav-link text-sm text-slate-300 hover:text-white transition-colors">Contact</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="#booking" class="hidden sm:inline-flex btn-glow ripple items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-medium px-5 py-2.5 rounded-full">Book a Project</a>
+                    <button id="menuBtn" class="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/5 transition-colors">
+                        <span class="menu-line w-5 h-0.5 bg-white rounded transition-all duration-300"></span>
+                        <span class="menu-line w-5 h-0.5 bg-white rounded transition-all duration-300"></span>
+                        <span class="menu-line w-3.5 h-0.5 bg-white rounded transition-all duration-300 self-end mr-2.5"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-y-0 right-0 w-72 sm:w-80 z-50 bg-dark-500/95 backdrop-blur-xl border-l border-white/5">
+        <div class="flex items-center justify-between p-6 border-b border-white/5">
+            <span class="text-white font-semibold text-lg">Menu</span>
+            <button id="closeMenu" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/5 transition-colors">
+                <iconify-icon icon="lucide:x" width="20" class="text-white"></iconify-icon>
+            </button>
+        </div>
+        <div class="flex flex-col p-6 gap-1">
+            <a href="#hero" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">Home</a>
+            <a href="#about" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">About</a>
+            <a href="#skills" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">Skills</a>
+            <a href="#services" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">Services</a>
+            <a href="#projects" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">Projects</a>
+            <a href="#testimonials" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">Reviews</a>
+            <a href="#booking" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">Book a Project</a>
+            <a href="#contact" class="mobile-link text-slate-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all text-sm font-medium">Contact</a>
+            <div class="mt-4 pt-4 border-t border-white/5">
+                <a href="#booking" class="btn-glow ripple flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-medium px-5 py-3 rounded-full w-full">Book a Project</a>
+            </div>
+        </div>
+    </div>
+    <div id="menuOverlay" class="fixed inset-0 bg-black/50 z-40 opacity-0 invisible transition-all duration-300"></div>
+
+    <!-- ==================== HERO ==================== -->
+    <section id="hero" class="relative min-h-screen flex items-center overflow-hidden pt-20">
+        <div class="glow-orb w-96 h-96 bg-emerald-500/10 top-10 -left-48" style="position:absolute;"></div>
+        <div class="glow-orb w-80 h-80 bg-blue-500/10 bottom-10 right-0" style="position:absolute; animation-delay:3s;"></div>
+        <div class="glow-orb w-64 h-64 bg-violet-500/8 top-1/2 left-1/2" style="position:absolute; animation-delay:5s;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                <div class="text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-6 reveal">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                        <span class="text-emerald-400 text-xs font-semibold tracking-wider uppercase">Available for Projects</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight leading-[1.05] mb-6 reveal" style="transition-delay:0.1s;">
+                        Hi, I'm<br><span class="font-semibold gradient-text">Ashif Ibrahim</span>
+                    </h1>
+                    <div class="text-lg sm:text-xl text-slate-300 font-light mb-4 reveal" style="transition-delay:0.2s;">
+                        <span id="typingText"></span><span class="typing-cursor"></span>
+                    </div>
+                    <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8 reveal" style="transition-delay:0.3s;">
+                        I build modern web applications, AI-powered systems, ecommerce platforms, automation tools, and scalable digital experiences for startups, businesses, and students.
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start reveal" style="transition-delay:0.4s;">
+                        <a href="#projects" class="btn-glow ripple inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-medium px-7 py-3.5 rounded-full text-sm transition-all">
+                            <iconify-icon icon="lucide:eye" width="18"></iconify-icon> View Projects
+                        </a>
+                        <a href="#booking" class="btn-glow ripple inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-500/30 text-white font-medium px-7 py-3.5 rounded-full text-sm transition-all">
+                            <iconify-icon icon="lucide:calendar" width="18"></iconify-icon> Book a Project
+                        </a>
+                        <a href="#contact" class="btn-glow ripple inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-500/30 text-white font-medium px-7 py-3.5 rounded-full text-sm transition-all">
+                            <iconify-icon icon="lucide:mail" width="18"></iconify-icon> Contact Me
+                        </a>
+                    </div>
+                    <div class="flex gap-8 sm:gap-12 mt-10 justify-center lg:justify-start reveal" style="transition-delay:0.5s;">
+                        <div><div class="text-2xl sm:text-3xl font-semibold text-white count-up" data-target="15">0</div><div class="text-xs text-slate-500 mt-1 tracking-wide uppercase">Projects</div></div>
+                        <div><div class="text-2xl sm:text-3xl font-semibold text-white count-up" data-target="10">0</div><div class="text-xs text-slate-500 mt-1 tracking-wide uppercase">Clients</div></div>
+                        <div><div class="text-2xl sm:text-3xl font-semibold text-white count-up" data-target="2">0</div><div class="text-xs text-slate-500 mt-1 tracking-wide uppercase">Years Exp</div></div>
+                    </div>
+                </div>
+                <div class="hidden lg:flex items-center justify-center relative">
+                    <div class="relative w-full max-w-md">
+                        <div class="glass-card rounded-2xl p-6 float-slow">
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="w-3 h-3 rounded-full bg-red-400/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400/80"></div>
+                                <span class="text-xs text-slate-500 ml-2">portfolio.js</span>
+                            </div>
+                            <pre class="text-xs sm:text-sm leading-relaxed"><code><span class="text-violet-400">const</span> <span class="text-blue-300">developer</span> = {
+  <span class="text-emerald-400">name</span>: <span class="text-amber-300">"Ashif Ibrahim"</span>,
+  <span class="text-emerald-400">role</span>: <span class="text-amber-300">"Full Stack Dev"</span>,
+  <span class="text-emerald-400">skills</span>: [
+    <span class="text-amber-300">"React"</span>, <span class="text-amber-300">"Node.js"</span>,
+    <span class="text-amber-300">"AI/ML"</span>, <span class="text-amber-300">"MongoDB"</span>
+  ],
+  <span class="text-emerald-400">passion</span>: <span class="text-amber-300">"Building AI apps"</span>,
+  <span class="text-violet-400">async</span> <span class="text-blue-300">buildDream</span>() {
+    <span class="text-violet-400">return</span> <span class="text-amber-300">"🚀 Excellence"</span>;
+  }
+};</code></pre>
+                        </div>
+                        <div class="absolute -top-4 -right-4 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-xl px-4 py-2.5 text-xs font-semibold float-medium shadow-lg shadow-emerald-500/20">
+                            <iconify-icon icon="lucide:sparkles" width="14" class="mr-1"></iconify-icon> AI Integration
+                        </div>
+                        <div class="absolute -bottom-4 -left-4 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl px-4 py-2.5 text-xs font-semibold float-fast shadow-lg shadow-blue-500/20" style="animation-delay:1s;">
+                            <iconify-icon icon="lucide:code-2" width="14" class="mr-1"></iconify-icon> Full Stack
+                        </div>
+                        <div class="absolute top-1/2 -right-8 bg-gradient-to-br from-violet-500 to-violet-600 text-white rounded-xl px-4 py-2.5 text-xs font-semibold float-slow shadow-lg shadow-violet-500/20" style="animation-delay:2s;">
+                            <iconify-icon icon="lucide:zap" width="14" class="mr-1"></iconify-icon> Fast Delivery
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 reveal" style="transition-delay:0.8s;">
+            <span class="text-[10px] text-slate-500 uppercase tracking-widest">Scroll</span>
+            <div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1.5">
+                <div class="w-1 h-2 bg-emerald-400 rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about" class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="glow-orb w-72 h-72 bg-emerald-500/5 top-0 right-0" style="position:absolute;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="reveal-left">
+                    <div class="relative">
+                        <div class="glass-card rounded-3xl p-8 sm:p-10">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-emerald-500/10 rounded-2xl p-6 text-center border border-emerald-500/10">
+                                    <iconify-icon icon="lucide:code-2" width="28" class="text-emerald-400 mb-3"></iconify-icon>
+                                    <div class="text-2xl font-semibold text-white">15+</div><div class="text-xs text-slate-400 mt-1">Projects</div>
+                                </div>
+                                <div class="bg-blue-500/10 rounded-2xl p-6 text-center border border-blue-500/10">
+                                    <iconify-icon icon="lucide:users" width="28" class="text-blue-400 mb-3"></iconify-icon>
+                                    <div class="text-2xl font-semibold text-white">10+</div><div class="text-xs text-slate-400 mt-1">Clients</div>
+                                </div>
+                                <div class="bg-violet-500/10 rounded-2xl p-6 text-center border border-violet-500/10">
+                                    <iconify-icon icon="lucide:brain" width="28" class="text-violet-400 mb-3"></iconify-icon>
+                                    <div class="text-2xl font-semibold text-white">5+</div><div class="text-xs text-slate-400 mt-1">AI Projects</div>
+                                </div>
+                                <div class="bg-amber-500/10 rounded-2xl p-6 text-center border border-amber-500/10">
+                                    <iconify-icon icon="lucide:star" width="28" class="text-amber-400 mb-3"></iconify-icon>
+                                    <div class="text-2xl font-semibold text-white">100%</div><div class="text-xs text-slate-400 mt-1">Satisfaction</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-3 -right-3 w-24 h-24 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-2xl blur-xl"></div>
+                    </div>
+                </div>
+                <div class="reveal-right">
+                    <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-6">
+                        <iconify-icon icon="lucide:user" width="14" class="text-emerald-400"></iconify-icon>
+                        <span class="text-emerald-400 text-xs font-semibold tracking-wider uppercase">About Me</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-6">Passionate About<br><span class="font-semibold gradient-text">Building the Future</span></h2>
+                    <p class="text-slate-400 leading-relaxed mb-6">Passionate Full Stack Developer specializing in modern frontend development, AI integrations, scalable backend systems, and intelligent applications. Focused on building high-performance digital products with clean UI/UX and modern technologies.</p>
+                    <p class="text-slate-400 leading-relaxed mb-8">I work with startups, businesses, and students to turn their ideas into reality. From ecommerce platforms to AI-powered chatbots and fraud detection systems — I deliver production-ready solutions with clean code and modern design.</p>
+                    <div class="flex flex-wrap gap-3 mb-8">
+                        <span class="bg-white/5 border border-white/8 rounded-full px-4 py-2 text-xs text-slate-300">React</span>
+                        <span class="bg-white/5 border border-white/8 rounded-full px-4 py-2 text-xs text-slate-300">Node.js</span>
+                        <span class="bg-white/5 border border-white/8 rounded-full px-4 py-2 text-xs text-slate-300">AI/ML</span>
+                        <span class="bg-white/5 border border-white/8 rounded-full px-4 py-2 text-xs text-slate-300">MongoDB</span>
+                        <span class="bg-white/5 border border-white/8 rounded-full px-4 py-2 text-xs text-slate-300">Tailwind CSS</span>
+                        <span class="bg-white/5 border border-white/8 rounded-full px-4 py-2 text-xs text-slate-300">LangChain</span>
+                    </div>
+                    <a href="#contact" class="btn-glow ripple inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-medium px-7 py-3.5 rounded-full text-sm transition-all">Let's Talk <iconify-icon icon="lucide:arrow-right" width="18"></iconify-icon></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SKILLS ==================== -->
+    <section id="skills" class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="glow-orb w-80 h-80 bg-blue-500/5 bottom-0 left-0" style="position:absolute;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-6">
+                    <iconify-icon icon="lucide:zap" width="14" class="text-blue-400"></iconify-icon>
+                    <span class="text-blue-400 text-xs font-semibold tracking-wider uppercase">My Skills</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4">Technologies I <span class="font-semibold gradient-text">Work With</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Proficient in modern web technologies and AI frameworks to deliver cutting-edge solutions.</p>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 stagger-children">
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="logos:html-5" width="36" class="mb-3 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">HTML5</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full" data-width="95%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="logos:css-3" width="36" class="mb-3 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">CSS3</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full" data-width="92%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="logos:javascript" width="36" class="mb-3 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">JavaScript</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-yellow-500 to-amber-400 rounded-full" data-width="90%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="logos:tailwindcss-icon" width="36" class="mb-3 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">Tailwind CSS</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-cyan-500 to-teal-400 rounded-full" data-width="93%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="logos:react" width="36" class="mb-3 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">React</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" data-width="88%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="logos:nodejs-icon" width="36" class="mb-3 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">Node.js</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full" data-width="85%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="logos:mongodb-icon" width="36" class="mb-3 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">MongoDB</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-green-600 to-green-400 rounded-full" data-width="82%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="lucide:brain" width="36" class="mb-3 text-violet-400 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">AI Integration</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-violet-500 to-purple-400 rounded-full" data-width="87%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="lucide:database" width="36" class="mb-3 text-blue-400 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">VectorDB</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-blue-500 to-indigo-400 rounded-full" data-width="78%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="lucide:link" width="36" class="mb-3 text-emerald-400 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">LangChain</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" data-width="80%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="lucide:scan-search" width="36" class="mb-3 text-cyan-400 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">RAG</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-cyan-500 to-blue-400 rounded-full" data-width="75%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default"><iconify-icon icon="lucide:sparkles" width="36" class="mb-3 text-amber-400 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">Generative AI</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full" data-width="83%"></div></div></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-5 sm:p-6 text-center group cursor-default col-span-2 sm:col-span-1"><iconify-icon icon="lucide:layers" width="36" class="mb-3 text-rose-400 transition-transform duration-300 group-hover:scale-110"></iconify-icon><div class="text-sm font-medium text-white">Full Stack Dev</div><div class="mt-3 h-1 bg-white/5 rounded-full overflow-hidden"><div class="skill-bar-fill h-full bg-gradient-to-r from-rose-500 to-pink-400 rounded-full" data-width="90%"></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SERVICES ==================== -->
+    <section id="services" class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="glow-orb w-80 h-80 bg-violet-500/5 top-1/3 right-0" style="position:absolute;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-4 py-1.5 mb-6"><iconify-icon icon="lucide:briefcase" width="14" class="text-violet-400"></iconify-icon><span class="text-violet-400 text-xs font-semibold tracking-wider uppercase">Services</span></div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4">What I <span class="font-semibold gradient-text">Offer</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Premium development services tailored to your business needs with modern technologies.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 stagger-children">
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-emerald-500/20 group-hover:scale-110"><iconify-icon icon="lucide:globe" width="22" class="text-emerald-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">Website Development</h3><p class="text-xs text-slate-400 leading-relaxed">Modern, responsive websites with clean code, fast performance, and professional design.</p></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-blue-500/20 group-hover:scale-110"><iconify-icon icon="lucide:shopping-cart" width="22" class="text-blue-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">Ecommerce Development</h3><p class="text-xs text-slate-400 leading-relaxed">Full-featured online stores with product management, cart, checkout, and payment integration.</p></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-violet-500/20 group-hover:scale-110"><iconify-icon icon="lucide:bot" width="22" class="text-violet-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">AI Chatbot Integration</h3><p class="text-xs text-slate-400 leading-relaxed">Smart AI chatbots using OpenAI/Gemini APIs for customer support and lead generation.</p></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-cyan-500/20 group-hover:scale-110"><iconify-icon icon="lucide:app-window" width="22" class="text-cyan-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">Full Stack Applications</h3><p class="text-xs text-slate-400 leading-relaxed">End-to-end web applications with robust backend, database, and modern frontend.</p></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-rose-500/20 group-hover:scale-110"><iconify-icon icon="lucide:brain-circuit" width="22" class="text-rose-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">AI-Based Systems</h3><p class="text-xs text-slate-400 leading-relaxed">Intelligent systems with ML models, fraud detection, RAG pipelines, and automation.</p></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-amber-500/20 group-hover:scale-110"><iconify-icon icon="lucide:palette" width="22" class="text-amber-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">UI/UX Design</h3><p class="text-xs text-slate-400 leading-relaxed">Beautiful, user-friendly interfaces with modern design principles and smooth interactions.</p></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-teal-500/20 group-hover:scale-110"><iconify-icon icon="lucide:layout-dashboard" width="22" class="text-teal-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">Portfolio Websites</h3><p class="text-xs text-slate-400 leading-relaxed">Stunning personal portfolio sites with animations, project showcases, and contact forms.</p></div>
+                <div class="reveal glass-card gradient-border rounded-2xl p-6 group cursor-default"><div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-indigo-500/20 group-hover:scale-110"><iconify-icon icon="lucide:graduation-cap" width="22" class="text-indigo-400"></iconify-icon></div><h3 class="text-base font-semibold text-white mb-2">College & Startup Projects</h3><p class="text-xs text-slate-400 leading-relaxed">Academic projects, final year projects, and MVP development for startups and students.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROJECTS ==================== -->
+    <section id="projects" class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="glow-orb w-96 h-96 bg-emerald-500/5 -bottom-20 left-1/4" style="position:absolute;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-6"><iconify-icon icon="lucide:folder-open" width="14" class="text-emerald-400"></iconify-icon><span class="text-emerald-400 text-xs font-semibold tracking-wider uppercase">Projects</span></div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4">Featured <span class="font-semibold gradient-text">Work</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">A selection of my recent projects showcasing web development and AI integration skills.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 lg:gap-8 stagger-children">
+                <div class="reveal glass-card rounded-3xl overflow-hidden group"><div class="relative overflow-hidden aspect-video"><img src="https://picsum.photos/seed/myntra-ecommerce-fashion/800/450.jpg" alt="Myntra Clone" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"><div class="absolute inset-0 bg-gradient-to-t from-dark-500 via-transparent to-transparent"></div><div class="absolute top-4 right-4"><span class="bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full">Ecommerce</span></div></div><div class="p-6 sm:p-8"><h3 class="text-xl font-semibold text-white mb-3 group-hover:text-emerald-400 transition-colors">Clone of Myntra – Ecommerce Platform</h3><p class="text-sm text-slate-400 leading-relaxed mb-5">A modern ecommerce fashion platform inspired by Myntra with responsive UI, product browsing, filtering, shopping experience, and modern frontend interactions.</p><div class="flex flex-wrap gap-2 mb-6"><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">HTML</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">Tailwind CSS</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">JavaScript</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">React</span></div><div class="flex gap-3"><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:external-link" width="14"></iconify-icon> Live Demo</a><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:github" width="14"></iconify-icon> GitHub</a></div></div></div>
+                <div class="reveal glass-card rounded-3xl overflow-hidden group"><div class="relative overflow-hidden aspect-video"><img src="https://z-cdn-media.chatglm.cn/files/8cbb61e1-10a0-40e6-9eac-9f6a568c5bd5.jpg?auth_key=1878150898-23f50feb67764ffeb29e84d45760915b-0-0146fe18bfe1602c561bdab604f61be5" alt="Cric Rebels – Cricket Scoring Platform" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"><div class="absolute inset-0 bg-gradient-to-t from-dark-500 via-transparent to-transparent"></div><div class="absolute top-4 right-4"><span class="bg-blue-500/90 backdrop-blur-sm text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full">Web App</span></div></div><div class="p-6 sm:p-8"><h3 class="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">Cric Rebels – Cricket Scoring Platform</h3><p class="text-sm text-slate-400 leading-relaxed mb-5">A cricket scoring and match management platform with live score updates, player statistics, match tracking, and responsive dashboard UI.</p><div class="flex flex-wrap gap-2 mb-6"><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">React</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">Node.js</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">MongoDB</span></div><div class="flex gap-3"><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:external-link" width="14"></iconify-icon> Live Demo</a><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:github" width="14"></iconify-icon> GitHub</a></div></div></div>
+                <div class="reveal glass-card rounded-3xl overflow-hidden group"><div class="relative overflow-hidden aspect-video"><img src="https://picsum.photos/seed/fraud-detection-banking-ai/800/450.jpg" alt="AI Fraud Detection" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"><div class="absolute inset-0 bg-gradient-to-t from-dark-500 via-transparent to-transparent"></div><div class="absolute top-4 right-4"><span class="bg-violet-500/90 backdrop-blur-sm text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full">AI/ML</span></div></div><div class="p-6 sm:p-8"><h3 class="text-xl font-semibold text-white mb-3 group-hover:text-violet-400 transition-colors">AI Based Fraud Detection Banking System</h3><p class="text-sm text-slate-400 leading-relaxed mb-5">An intelligent banking fraud detection system using AI-based transaction analysis and anomaly detection for secure financial operations.</p><div class="flex flex-wrap gap-2 mb-6"><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">AI Integration</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">Node.js</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">MongoDB</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">Machine Learning</span></div><div class="flex gap-3"><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:external-link" width="14"></iconify-icon> Live Demo</a><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:github" width="14"></iconify-icon> GitHub</a></div></div></div>
+                <div class="reveal glass-card rounded-3xl overflow-hidden group"><div class="relative overflow-hidden aspect-video"><img src="https://picsum.photos/seed/ai-chatbot-gemini-openai/800/450.jpg" alt="AI Chatbot" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"><div class="absolute inset-0 bg-gradient-to-t from-dark-500 via-transparent to-transparent"></div><div class="absolute top-4 right-4"><span class="bg-amber-500/90 backdrop-blur-sm text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full">AI Chatbot</span></div></div><div class="p-6 sm:p-8"><h3 class="text-xl font-semibold text-white mb-3 group-hover:text-amber-400 transition-colors">AI Chatbot with Gemini/OpenAI</h3><p class="text-sm text-slate-400 leading-relaxed mb-5">An AI-powered chatbot integrated with OpenAI/Gemini APIs capable of answering queries, handling client interactions, and automating support tasks.</p><div class="flex flex-wrap gap-2 mb-6"><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">JavaScript</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">Gemini API</span><span class="bg-white/5 border border-white/8 text-[11px] text-slate-300 px-3 py-1 rounded-full">OpenAI API</span></div><div class="flex gap-3"><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:external-link" width="14"></iconify-icon> Live Demo</a><a href="#" class="btn-glow ripple inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-medium px-5 py-2.5 rounded-full transition-all"><iconify-icon icon="lucide:github" width="14"></iconify-icon> GitHub</a></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TESTIMONIALS ==================== -->
+    <section id="testimonials" class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="glow-orb w-72 h-72 bg-blue-500/5 top-1/4 -left-20" style="position:absolute;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-1.5 mb-6"><iconify-icon icon="lucide:star" width="14" class="text-amber-400"></iconify-icon><span class="text-amber-400 text-xs font-semibold tracking-wider uppercase">Testimonials</span></div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4">Client <span class="font-semibold gradient-text">Reviews</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">What clients say about working with me.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-5 sm:gap-6 stagger-children">
+                <div class="reveal glass-card rounded-2xl p-6 sm:p-8"><div class="flex gap-1 mb-4"><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon></div><p class="text-sm text-slate-300 leading-relaxed mb-6">"Professional developer with modern design skills. The website he built for my startup exceeded expectations — clean UI, fast performance, and great attention to detail."</p><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white font-semibold text-sm">R</div><div><div class="text-sm font-medium text-white">Rahul Sharma</div><div class="text-xs text-slate-500">Startup Founder</div></div></div></div>
+                <div class="reveal glass-card rounded-2xl p-6 sm:p-8"><div class="flex gap-1 mb-4"><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon></div><p class="text-sm text-slate-300 leading-relaxed mb-6">"Delivered the project on time with great quality. The AI chatbot integration was seamless and our customer support efficiency improved significantly after deployment."</p><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-sm">P</div><div><div class="text-sm font-medium text-white">Priya Patel</div><div class="text-xs text-slate-500">Ecommerce Owner</div></div></div></div>
+                <div class="reveal glass-card rounded-2xl p-6 sm:p-8"><div class="flex gap-1 mb-4"><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon><iconify-icon icon="lucide:star" width="16" class="text-amber-400"></iconify-icon></div><p class="text-sm text-slate-300 leading-relaxed mb-6">"Excellent AI integration and frontend work. The fraud detection system he built was exactly what our banking team needed — intelligent, fast, and reliable."</p><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center text-white font-semibold text-sm">A</div><div><div class="text-sm font-medium text-white">Amit Verma</div><div class="text-xs text-slate-500">Tech Lead</div></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== BOOKING ==================== -->
+    <section id="booking" class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="glow-orb w-96 h-96 bg-emerald-500/5 top-0 left-1/2" style="position:absolute;"></div>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-12 reveal">
+                <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-6"><iconify-icon icon="lucide:calendar-check" width="14" class="text-emerald-400"></iconify-icon><span class="text-emerald-400 text-xs font-semibold tracking-wider uppercase">Book a Project</span></div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4">Start Your <span class="font-semibold gradient-text">Project</span></h2>
+                <p class="text-slate-400 max-w-xl mx-auto">Fill out the form below and your booking details will be sent directly via WhatsApp for a quick response.</p>
+            </div>
+            <div class="reveal glass-card rounded-3xl p-6 sm:p-10">
+                <form id="bookingForm" novalidate>
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div><label class="text-xs text-slate-400 font-medium mb-2 block tracking-wide uppercase">Full Name *</label><input type="text" name="fullName" placeholder="John Doe" class="form-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600" required><div class="error-msg">Please enter your name</div></div>
+                        <div><label class="text-xs text-slate-400 font-medium mb-2 block tracking-wide uppercase">Email Address *</label><input type="email" name="email" placeholder="john@example.com" class="form-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600" required><div class="error-msg">Please enter a valid email</div></div>
+                        <div><label class="text-xs text-slate-400 font-medium mb-2 block tracking-wide uppercase">Phone Number *</label><input type="tel" name="phone" placeholder="+91 98765 43210" class="form-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600" required><div class="error-msg">Please enter your phone number</div></div>
+                        <div><label class="text-xs text-slate-400 font-medium mb-2 block tracking-wide uppercase">Project Type *</label><select name="projectType" class="form-input w-full px-4 py-3 rounded-xl text-sm text-white appearance-none cursor-pointer" required><option value="" class="bg-dark-500">Select type</option><option value="Website Development" class="bg-dark-500">Website Development</option><option value="Ecommerce Platform" class="bg-dark-500">Ecommerce Platform</option><option value="AI Chatbot Integration" class="bg-dark-500">AI Chatbot Integration</option><option value="Full Stack Application" class="bg-dark-500">Full Stack Application</option><option value="AI-Based System" class="bg-dark-500">AI-Based System</option><option value="Portfolio Website" class="bg-dark-500">Portfolio Website</option><option value="College/Startup Project" class="bg-dark-500">College/Startup Project</option><option value="Other" class="bg-dark-500">Other</option></select><div class="error-msg">Please select a project type</div></div>
+                        <div><label class="text-xs text-slate-400 font-medium mb-2 block tracking-wide uppercase">Budget</label><select name="budget" class="form-input w-full px-4 py-3 rounded-xl text-sm text-white appearance-none cursor-pointer"><option value="" class="bg-dark-500">Select budget</option><option value="₹5,000 – ₹10,000" class="bg-dark-500">₹5,000 – ₹10,000</option><option value="₹10,000 – ₹25,000" class="bg-dark-500">₹10,000 – ₹25,000</option><option value="₹25,000 – ₹50,000" class="bg-dark-500">₹25,000 – ₹50,000</option><option value="₹50,000 – ₹1,00,000" class="bg-dark-500">₹50,000 – ₹1,00,000</option><option value="₹1,00,000+" class="bg-dark-500">₹1,00,000+</option></select></div>
+                        <div><label class="text-xs text-slate-400 font-medium mb-2 block tracking-wide uppercase">Deadline</label><input type="date" name="deadline" class="form-input w-full px-4 py-3 rounded-xl text-sm text-white"></div>
+                    </div>
+                    <div class="mt-5"><label class="text-xs text-slate-400 font-medium mb-2 block tracking-wide uppercase">Project Description *</label><textarea name="description" rows="5" placeholder="Describe your project requirements, features, and goals..." class="form-input w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-600 resize-none" required></textarea><div class="error-msg">Please describe your project</div></div>
+                    <button type="submit" id="submitBtn" class="btn-glow ripple w-full sm:w-auto mt-6 inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-medium px-10 py-4 rounded-full text-sm transition-all">
+                        <span class="spinner"></span>
+                        <iconify-icon icon="lucide:send" width="18"></iconify-icon>
+                        Submit & Send via WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact" class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="glow-orb w-72 h-72 bg-violet-500/5 bottom-0 right-0" style="position:absolute;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/20 rounded-full px-4 py-1.5 mb-6"><iconify-icon icon="lucide:mail" width="14" class="text-rose-400"></iconify-icon><span class="text-rose-400 text-xs font-semibold tracking-wider uppercase">Contact</span></div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4">Get in <span class="font-semibold gradient-text">Touch</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Have a question or want to discuss a project? Reach out through any of these channels.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 stagger-children">
+                <a href="mailto:asihfibrahim600@gmail.com" class="reveal glass-card gradient-border rounded-2xl p-6 text-center group block"><div class="w-14 h-14 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:bg-rose-500/20 group-hover:scale-110"><iconify-icon icon="lucide:mail" width="24" class="text-rose-400"></iconify-icon></div><h3 class="text-sm font-semibold text-white mb-1">Email</h3><p class="text-xs text-slate-400 break-all">asihfibrahim600@gmail.com</p></a>
+                <a href="https://wa.me/919677988241?text=Hello%2C%20I%20want%20to%20discuss%20a%20project." target="_blank" class="reveal glass-card gradient-border rounded-2xl p-6 text-center group block"><div class="w-14 h-14 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:bg-green-500/20 group-hover:scale-110"><iconify-icon icon="lucide:message-circle" width="24" class="text-green-400"></iconify-icon></div><h3 class="text-sm font-semibold text-white mb-1">WhatsApp</h3><p class="text-xs text-slate-400">+91 96779 88241</p></a>
+                <a href="#" class="reveal glass-card gradient-border rounded-2xl p-6 text-center group block"><div class="w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:bg-blue-500/20 group-hover:scale-110"><iconify-icon icon="lucide:linkedin" width="24" class="text-blue-400"></iconify-icon></div><h3 class="text-sm font-semibold text-white mb-1">LinkedIn</h3><p class="text-xs text-slate-400">Connect with me</p></a>
+                <a href="#" class="reveal glass-card gradient-border rounded-2xl p-6 text-center group block"><div class="w-14 h-14 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:bg-slate-500/20 group-hover:scale-110"><iconify-icon icon="lucide:github" width="24" class="text-slate-300"></iconify-icon></div><h3 class="text-sm font-semibold text-white mb-1">GitHub</h3><p class="text-xs text-slate-400">View my code</p></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="relative border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+                <div class="lg:col-span-2">
+                    <a href="#hero" class="flex items-center gap-2 mb-4"><div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">AI</div><span class="text-white font-semibold text-lg tracking-tight">Ashif Ibrahim<span class="text-emerald-400">.</span></span></a>
+                    <p class="text-sm text-slate-400 leading-relaxed max-w-sm mb-5">Full Stack Developer & AI Integration Specialist building modern digital experiences for startups and businesses.</p>
+                    <div class="flex gap-3">
+                        <a href="mailto:asihfibrahim600@gmail.com" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-emerald-500/20 border border-white/8 hover:border-emerald-500/30 flex items-center justify-center transition-all"><iconify-icon icon="lucide:mail" width="16" class="text-slate-400"></iconify-icon></a>
+                        <a href="https://wa.me/919677988241" target="_blank" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-green-500/20 border border-white/8 hover:border-green-500/30 flex items-center justify-center transition-all"><iconify-icon icon="lucide:message-circle" width="16" class="text-slate-400"></iconify-icon></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-blue-500/20 border border-white/8 hover:border-blue-500/30 flex items-center justify-center transition-all"><iconify-icon icon="lucide:linkedin" width="16" class="text-slate-400"></iconify-icon></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 border border-white/8 hover:border-white/20 flex items-center justify-center transition-all"><iconify-icon icon="lucide:github" width="16" class="text-slate-400"></iconify-icon></a>
+                    </div>
+                </div>
+                <div><h4 class="text-sm font-semibold text-white mb-4 tracking-wide">Quick Links</h4><div class="flex flex-col gap-2.5"><a href="#about" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors">About</a><a href="#skills" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors">Skills</a><a href="#services" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors">Services</a><a href="#projects" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors">Projects</a><a href="#booking" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors">Book a Project</a></div></div>
+                <div><h4 class="text-sm font-semibold text-white mb-4 tracking-wide">Contact</h4><div class="flex flex-col gap-2.5"><a href="mailto:asihfibrahim600@gmail.com" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors break-all">asihfibrahim600@gmail.com</a><a href="https://wa.me/919677988241" target="_blank" class="text-sm text-slate-400 hover:text-emerald-400 transition-colors">+91 96779 88241</a><span class="text-sm text-slate-400">India</span></div></div>
+            </div>
+            <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-slate-500">© 2026 Ashif Ibrahim. All Rights Reserved.</p>
+                <p class="text-xs text-slate-600">Built with passion & modern tech</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WHATSAPP FLOATING BUTTON -->
+    <a href="https://wa.me/919677988241?text=Hello%2C%20I%20want%20to%20discuss%20a%20project." target="_blank" id="whatsappBtn" class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-400 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 whatsapp-pulse transition-transform duration-300 hover:scale-110" style="display:none;">
+        <iconify-icon icon="logos:whatsapp-icon" width="28"></iconify-icon>
+    </a>
+
+    <!-- AI CHATBOT -->
+    <div class="fixed bottom-6 left-6 z-40" id="chatbotContainer" style="display:none;">
+        <button id="chatToggle" class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30 transition-transform duration-300 hover:scale-110">
+            <iconify-icon icon="lucide:bot" width="26" class="text-white" id="chatIconOpen"></iconify-icon>
+            <iconify-icon icon="lucide:x" width="24" class="text-white hidden" id="chatIconClose"></iconify-icon>
+        </button>
+        <div id="chatPopup" class="chatbot-popup absolute bottom-20 left-0 w-[340px] sm:w-[380px] rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10">
+            <div class="bg-gradient-to-r from-emerald-600 to-blue-600 p-5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center"><iconify-icon icon="lucide:bot" width="22" class="text-white"></iconify-icon></div><div><div class="text-sm font-semibold text-white">AI Assistant</div><div class="flex items-center gap-1.5"><span class="w-2 h-2 bg-green-300 rounded-full animate-pulse"></span><span class="text-[11px] text-emerald-100">Online</span></div></div></div></div>
+            <div id="chatBody" class="bg-dark-500/95 backdrop-blur-xl p-4 h-72 overflow-y-auto" style="scrollbar-width:thin;"></div>
+            <div id="chatSuggestions" class="bg-dark-500/95 backdrop-blur-xl px-4 py-3 border-t border-white/5"><div class="flex flex-wrap gap-2"><button class="suggestion-btn text-[11px] bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/30 text-slate-300 px-3 py-1.5 rounded-full transition-all" data-msg="What is your website pricing?">Website pricing</button><button class="suggestion-btn text-[11px] bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/30 text-slate-300 px-3 py-1.5 rounded-full transition-all" data-msg="Tell me about your AI projects">AI projects</button><button class="suggestion-btn text-[11px] bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/30 text-slate-300 px-3 py-1.5 rounded-full transition-all" data-msg="Do you build ecommerce websites?">Ecommerce development</button><button class="suggestion-btn text-[11px] bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/30 text-slate-300 px-3 py-1.5 rounded-full transition-all" data-msg="How can I book a project?">Booking a project</button></div></div>
+            <div class="bg-dark-500/95 backdrop-blur-xl p-3 border-t border-white/5"><form id="chatForm" class="flex gap-2"><input type="text" id="chatInput" placeholder="Type a message..." class="form-input flex-1 px-4 py-2.5 rounded-xl text-sm text-white placeholder-slate-600"><button type="submit" class="w-10 h-10 bg-emerald-500 hover:bg-emerald-400 rounded-xl flex items-center justify-center transition-colors flex-shrink-0"><iconify-icon icon="lucide:send" width="16" class="text-white"></iconify-icon></button></form></div>
+        </div>
+    </div>
+
+    <!-- SUCCESS POPUP -->
+    <div id="successPopup" class="success-popup fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="successOverlay"></div>
+        <div class="relative glass-card rounded-3xl p-8 sm:p-10 max-w-sm w-full text-center border border-emerald-500/20">
+            <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-5">
+                <iconify-icon icon="lucide:check-circle" width="32" class="text-emerald-400"></iconify-icon>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">Booking Sent via WhatsApp!</h3>
+            <p class="text-sm text-slate-400 mb-2">Your project details have been sent to WhatsApp.</p>
+            <p class="text-sm text-slate-400 mb-6">If WhatsApp didn't open, <a href="#" id="manualWALink" class="text-emerald-400 underline font-medium">click here to send manually</a>.</p>
+            <button id="closeSuccess" class="btn-glow ripple bg-emerald-500 hover:bg-emerald-400 text-white font-medium px-8 py-3 rounded-full text-sm transition-all">Got it</button>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1200);
+
+        // Particles
+        const particlesContainer = document.getElementById('particles');
+        function createParticle() {
+            const p = document.createElement('div'); p.classList.add('particle');
+            const size = Math.random() * 3 + 1, left = Math.random() * 100, duration = Math.random() * 15 + 10;
+            const colors = ['rgba(16,185,129,0.3)', 'rgba(59,130,246,0.3)', 'rgba(167,139,250,0.2)'];
+            p.style.cssText = `width:${size}px;height:${size}px;left:${left}%;bottom:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${duration}s;animation-delay:${Math.random()*5}s;`;
+            particlesContainer.appendChild(p);
+            setTimeout(() => p.remove(), (duration + 5) * 1000);
+        }
+        setInterval(createParticle, 800);
+
+        // Typing effect
+        const titles = ["Full Stack Developer & AI Integration Specialist","Building Modern Web Applications","AI-Powered Systems Expert","Ecommerce Platform Developer","Turning Ideas Into Digital Reality"];
+        let titleIndex = 0, charIndex = 0, isDeleting = false;
+        const typingEl = document.getElementById('typingText');
+        function typeEffect() {
+            const current = titles[titleIndex];
+            if (!isDeleting) { typingEl.textContent = current.substring(0, charIndex + 1); charIndex++; if (charIndex === current.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; } setTimeout(typeEffect, 50); }
+            else { typingEl.textContent = current.substring(0, charIndex - 1); charIndex--; if (charIndex === 0) { isDeleting = false; titleIndex = (titleIndex + 1) % titles.length; setTimeout(typeEffect, 400); return; } setTimeout(typeEffect, 30); }
+        }
+        setTimeout(typeEffect, 1500);
+
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            const st = window.scrollY;
+            if (st > 80) { navbar.style.background = 'rgba(6,6,26,0.85)'; navbar.style.backdropFilter = 'blur(16px)'; navbar.style.borderBottom = '1px solid rgba(255,255,255,0.05)'; }
+            else { navbar.style.background = 'transparent'; navbar.style.backdropFilter = 'none'; navbar.style.borderBottom = 'none'; }
+        });
+
+        // Mobile menu
+        const mobileMenu = document.getElementById('mobileMenu'), menuOverlay = document.getElementById('menuOverlay');
+        function openMenu() { mobileMenu.classList.add('open'); menuOverlay.style.opacity = '1'; menuOverlay.style.visibility = 'visible'; document.body.style.overflow = 'hidden'; }
+        function closeMenu() { mobileMenu.classList.remove('open'); menuOverlay.style.opacity = '0'; menuOverlay.style.visibility = 'hidden'; document.body.style.overflow = ''; }
+        document.getElementById('menuBtn').addEventListener('click', openMenu);
+        document.getElementById('closeMenu').addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+        document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', closeMenu));
+
+        // Scroll reveal
+        const revealObserver = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObserver.observe(el));
+
+        // Skill bars
+        const skillObserver = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.style.width = e.target.dataset.width; e.target.classList.add('active'); } }); }, { threshold: 0.5 });
+        document.querySelectorAll('.skill-bar-fill').forEach(bar => skillObserver.observe(bar));
+
+        // Count up
+        const countObserver = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { const t = parseInt(e.target.dataset.target); let c = 0; const inc = t / 40; const timer = setInterval(() => { c += inc; if (c >= t) { e.target.textContent = t + '+'; clearInterval(timer); } else { e.target.textContent = Math.floor(c) + '+'; } }, 50); countObserver.unobserve(e.target); } }); }, { threshold: 0.5 });
+        document.querySelectorAll('.count-up').forEach(el => countObserver.observe(el));
+
+        // Active nav
+        const sections = document.querySelectorAll('section[id]'), navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => { let cur = ''; sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; }); navLinks.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href') === '#' + cur) l.classList.add('active'); }); });
+
+        // Ripple
+        document.querySelectorAll('.ripple').forEach(btn => { btn.addEventListener('click', function(e) { const r = this.getBoundingClientRect(); const rip = document.createElement('span'); rip.classList.add('ripple-effect'); const sz = Math.max(r.width, r.height); rip.style.width = rip.style.height = sz + 'px'; rip.style.left = (e.clientX - r.left - sz/2) + 'px'; rip.style.top = (e.clientY - r.top - sz/2) + 'px'; this.appendChild(rip); setTimeout(() => rip.remove(), 600); }); });
+
+        // ========== BOOKING FORM → WHATSAPP ==========
+        const bookingForm = document.getElementById('bookingForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const YOUR_WHATSAPP = '919677988241';
+        let waUrl = '';
+
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+            const fields = bookingForm.querySelectorAll('[required]');
+            fields.forEach(field => {
+                const error = field.parentElement.querySelector('.error-msg');
+                field.classList.remove('error');
+                if (error) error.classList.remove('show');
+                if (!field.value.trim()) { isValid = false; field.classList.add('error'); if (error) error.classList.add('show'); }
+                else if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) { isValid = false; field.classList.add('error'); if (error) error.classList.add('show'); }
+            });
+
+            if (!isValid) return;
+
+            // Show loading
+            submitBtn.classList.add('btn-submitting');
+
+            // Collect form data
+            const name = bookingForm.fullName.value.trim();
+            const email = bookingForm.email.value.trim();
+            const phone = bookingForm.phone.value.trim();
+            const projectType = bookingForm.projectType.value;
+            const budget = bookingForm.budget.value || 'Not specified';
+            const deadline = bookingForm.deadline.value || 'Not specified';
+            const description = bookingForm.description.value.trim();
+
+            // Format WhatsApp message
+            const message = `🟢 *NEW PROJECT BOOKING*
+━━━━━━━━━━━━━━━━━━━━
+
+📋 *Name:* ${name}
+📧 *Email:* ${email}
+📱 *Phone:* ${phone}
+
+📂 *Project Type:* ${projectType}
+💰 *Budget:* ${budget}
+📅 *Deadline:* ${deadline}
+
+📝 *Description:*
+ ${description}
+
+━━━━━━━━━━━━━━━━━━━━
+_Sent from portfolio website_`;
+
+            // Build WhatsApp URL
+            waUrl = `https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+            // Simulate brief processing then open WhatsApp
+            setTimeout(() => {
+                submitBtn.classList.remove('btn-submitting');
+                bookingForm.reset();
+
+                // Open WhatsApp
+                window.open(waUrl, '_blank');
+
+                // Set manual link
+                document.getElementById('manualWALink').href = waUrl;
+
+                // Show success popup
+                document.getElementById('successPopup').classList.add('show');
+            }, 800);
+        });
+
+        bookingForm.querySelectorAll('[required]').forEach(field => {
+            field.addEventListener('input', () => { field.classList.remove('error'); const error = field.parentElement.querySelector('.error-msg'); if (error) error.classList.remove('show'); });
+        });
+
+        // Success popup close
+        document.getElementById('closeSuccess').addEventListener('click', () => document.getElementById('successPopup').classList.remove('show'));
+        document.getElementById('successOverlay').addEventListener('click', () => document.getElementById('successPopup').classList.remove('show'));
+
+        // Show floating elements
+        setTimeout(() => { document.getElementById('whatsappBtn').style.display = 'flex'; document.getElementById('chatbotContainer').style.display = 'block'; }, 1500);
+
+        // ========== AI CHATBOT ==========
+        const chatToggle = document.getElementById('chatToggle'), chatPopup = document.getElementById('chatPopup');
+        const chatIconOpen = document.getElementById('chatIconOpen'), chatIconClose = document.getElementById('chatIconClose');
+        const chatBody = document.getElementById('chatBody'), chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput'), chatSuggestions = document.getElementById('chatSuggestions');
+        let chatOpen = false;
+
+        chatToggle.addEventListener('click', () => {
+            chatOpen = !chatOpen; chatPopup.classList.toggle('open', chatOpen);
+            chatIconOpen.classList.toggle('hidden', chatOpen); chatIconClose.classList.toggle('hidden', !chatOpen);
+            if (chatOpen && chatBody.children.length === 0) addBotMessage("Hi 👋 How can I help you today?");
+        });
+
+        function addBotMessage(text) { const w = document.createElement('div'); w.className = 'flex gap-2 mb-3 items-end'; w.innerHTML = `<div class="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center flex-shrink-0"><iconify-icon icon="lucide:bot" width="14" class="text-white"></iconify-icon></div><div class="bg-white/5 border border-white/8 rounded-2xl rounded-bl-sm px-4 py-2.5 max-w-[80%]"><p class="text-sm text-slate-200 leading-relaxed">${text}</p></div>`; chatBody.appendChild(w); chatBody.scrollTop = chatBody.scrollHeight; }
+        function addUserMessage(text) { const w = document.createElement('div'); w.className = 'flex gap-2 mb-3 items-end justify-end'; w.innerHTML = `<div class="bg-emerald-500/20 border border-emerald-500/20 rounded-2xl rounded-br-sm px-4 py-2.5 max-w-[80%]"><p class="text-sm text-emerald-100 leading-relaxed">${text}</p></div>`; chatBody.appendChild(w); chatBody.scrollTop = chatBody.scrollHeight; }
+        function showTyping() { const w = document.createElement('div'); w.className = 'flex gap-2 mb-3 items-end'; w.id = 'typingIndicator'; w.innerHTML = `<div class="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center flex-shrink-0"><iconify-icon icon="lucide:bot" width="14" class="text-white"></iconify-icon></div><div class="bg-white/5 border border-white/8 rounded-2xl rounded-bl-sm px-4 py-3"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`; chatBody.appendChild(w); chatBody.scrollTop = chatBody.scrollHeight; }
+        function removeTyping() { const el = document.getElementById('typingIndicator'); if (el) el.remove(); }
+
+        const botResponses = {
+            'pricing': "Website pricing starts from ₹5,000 and goes up based on complexity. A simple portfolio site is around ₹5K-10K, ecommerce platforms ₹15K-50K, and AI-integrated applications start from ₹20K. Want me to give you a custom quote? Just fill out the <a href='#booking' class='text-emerald-400 underline'>booking form</a>!",
+            'ai': "I've built several AI-powered projects including:\n\n• AI Chatbot with Gemini/OpenAI APIs\n• Fraud Detection Banking System\n• RAG-based document assistants\n• LangChain integrated applications\n\nI specialize in making AI practical and production-ready. Want to discuss an AI project?",
+            'ecommerce': "Yes! I build full-featured ecommerce platforms with:\n\n• Product catalog & search\n• Cart & checkout system\n• Payment gateway integration\n• Admin dashboard\n• Responsive design\n\nCheck out my Myntra clone project for a demo!",
+            'booking': "To book a project, simply fill out the <a href='#booking' class='text-emerald-400 underline'>booking form</a> on this page. Include your project details, budget, and deadline. Your message will be sent directly to my WhatsApp!",
+            'hello': "Hello! 👋 Welcome! How can I assist you today? Feel free to ask about my services, pricing, or projects.",
+            'hi': "Hi there! 😊 How can I help you? Ask me about web development, AI projects, pricing, or anything else!",
+            'time': "I typically deliver simple websites in 3-5 days, ecommerce platforms in 1-3 weeks, and complex AI applications in 2-4 weeks depending on requirements.",
+            'tech': "My main tech stack includes:\n\n• Frontend: React, Tailwind CSS, JavaScript\n• Backend: Node.js, Express\n• Database: MongoDB, VectorDB\n• AI: OpenAI, Gemini, LangChain, RAG\n\nI always use the best tools for each project!",
+            'default': "Thanks for your message! I'd love to help you with that. For detailed discussions, you can:\n\n• Fill out the <a href='#booking' class='text-emerald-400 underline'>booking form</a>\n• <a href='mailto:asihfibrahim600@gmail.com' class='text-emerald-400 underline'>Email me</a> directly\n• <a href='https://wa.me/919677988241' target='_blank' class='text-emerald-400 underline'>WhatsApp me</a>\n\nI respond within 24 hours!"
+        };
+
+        function getBotResponse(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('pricing') || lower.includes('price') || lower.includes('cost') || lower.includes('rate') || lower.includes('charge') || lower.includes('how much')) return botResponses.pricing;
+            if (lower.includes('ai') || lower.includes('artificial') || lower.includes('machine learning') || lower.includes('ml') || lower.includes('chatbot') || lower.includes('gemini') || lower.includes('openai') || lower.includes('langchain') || lower.includes('rag')) return botResponses.ai;
+            if (lower.includes('ecommerce') || lower.includes('e-commerce') || lower.includes('shop') || lower.includes('store') || lower.includes('myntra') || lower.includes('amazon')) return botResponses.ecommerce;
+            if (lower.includes('book') || lower.includes('hire') || lower.includes('start') || lower.includes('order') || lower.includes('project')) return botResponses.booking;
+            if (lower.includes('hello') || lower.includes('hey') || lower.includes('hii')) return botResponses.hello;
+            if (lower.includes('hi')) return botResponses.hi;
+            if (lower.includes('time') || lower.includes('delivery') || lower.includes('deadline') || lower.includes('how long') || lower.includes('duration')) return botResponses.time;
+            if (lower.includes('tech') || lower.includes('stack') || lower.includes('technology') || lower.includes('tools') || lower.includes('framework') || lower.includes('language')) return botResponses.tech;
+            if (lower.includes('thank')) return "You're welcome! 😊 Feel free to reach out anytime. Have a great day!";
+            return botResponses.default;
+        }
+
+        chatForm.addEventListener('submit', (e) => { e.preventDefault(); const text = chatInput.value.trim(); if (!text) return; addUserMessage(text); chatInput.value = ''; chatSuggestions.style.display = 'none'; showTyping(); setTimeout(() => { removeTyping(); addBotMessage(getBotResponse(text).replace(/\n/g, '<br>')); }, Math.random() * 800 + 800); });
+        document.querySelectorAll('.suggestion-btn').forEach(btn => { btn.addEventListener('click', () => { const msg = btn.dataset.msg; addUserMessage(msg); chatSuggestions.style.display = 'none'; showTyping(); setTimeout(() => { removeTyping(); addBotMessage(getBotResponse(msg).replace(/\n/g, '<br>')); }, 1000); }); });
+
+    });
+    </script>
+</body>
+</html>
